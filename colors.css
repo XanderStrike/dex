@@ -1,3 +1,67 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 20px;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+input {
+  border: none;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  font-size: 40px;
+  padding: 0.125em;
+}
+.results {
+  overflow-x: hidden;
+}
+.result-line {
+  padding: 1em 0 1em 1em;
+  border-top: solid;
+}
+.id {
+  display: inline-block;
+  width: 3em;
+}
+
+.banner {
+  background-color: black;
+  padding: 0.5em;
+  color: white;
+  margin-top: 1em;
+}
+
+.types {
+  margin: 1em 0
+}
+.type-badge {
+  padding: 0.25em;
+  margin-bottom: 5em
+}
+
+.damage-row {
+  display: block;
+  width: 100%;
+  padding: 0.25em 0;
+}
+
+.row-inner {
+  padding: 0.25em;
+}
+
+.move-row {
+  display: block;
+  width: 100%;
+  padding:0.25em 0;
+}
+
+.move-level {
+  display: inline-block;
+  width: 4em;
+
+}
+
 .bug { background-color: #A6B91A }
 .dark { background-color: #705746; color: #eee }
 .dragon { background-color: #6F35FC; color: #eee }
