@@ -10,14 +10,14 @@
   <div class="damage">
     <div class="banner">Weaknesses</div>
     <% @damage.each do |type, multiplier| %>
-      <span class="damage-row <%= type.downcase %>"><%= multiplier %>x <%= type %></span>
+      <span class="damage-row <%= type.downcase %>"><span class="row-inner"><%= multiplier %>x <%= type %></span></span>
     <% end %>
   </div>
 
   <div class="moves">
     <div class="banner">Moveset</div>
     <% @learnset.each do |move| %>
-      <span class="move-row <%= move["type"] %>"><span class="move-level"><%= move["level"] %></span><%= move["move"] %></span>
+      <span class="move-row <%= move["type"] %>"><span class="row-inner"><span class="move-level"><%= move["level"] %></span><%= move["move"] %></span></span>
     <% end %>
   </div>
 </div>

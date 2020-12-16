@@ -7,6 +7,7 @@ body {
   padding: 0;
   margin: 0;
   font-size: 20px;
+  max-width: 100vw;
   overflow-x: hidden;
 }
 input {
@@ -47,7 +48,11 @@ input {
 .damage-row {
   display: block;
   width: 100%;
-  padding:0.25em 0;
+  padding: 0.25em 0;
+}
+
+.row-inner {
+  padding: 0.25em;
 }
 
 .move-row {
@@ -91,6 +96,10 @@ $("#search").keyup(debounce(function() {
   var q = $("#search").val().toLowerCase();
   writeResults(q);
 }, 100));
+
+$("#search").focus( function() {
+  $(this).val('');
+});
 
 function writeResults(q) {
   $("#results").empty();
