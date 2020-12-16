@@ -48,8 +48,6 @@ function hooks() {
   $(".result-line").click(function() {
     var id = $(this).find("span.id").html();
     var name = $(this).find("span.name").html();
-    console.log(id);
-    console.log(name);
     $("#search").val(name);
     fetch('pokemon/' + id + '.html')
     .then((response) => response.text())
