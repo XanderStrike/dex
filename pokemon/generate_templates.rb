@@ -21,7 +21,7 @@ class Renderer
     @template = File.open('pokemon.html.erb', 'rb', &:read)
     @pokemon = Oakdex::Pokedex::Pokemon.find(id)
     @types = types
-    @damage = damage.sort_by {|_k, v| v}.reverse
+    @damage = damage.sort_by { |_k, v| v }.reverse
     @learnset = learnset
   end
 
@@ -36,10 +36,10 @@ class Renderer
   end
 
   def damage
-    return $weaknesses[@types.first.names["en"]] if @types.count == 1
+    return $weaknesses[@types.first.names['en']] if @types.count == 1
 
-    list1 = $weaknesses[@types.first.names["en"]]
-    list2 = $weaknesses[@types.last.names["en"]]
+    list1 = $weaknesses[@types.first.names['en']]
+    list2 = $weaknesses[@types.last.names['en']]
 
     damage = {}
     list1.keys.each do |k|
@@ -50,24 +50,36 @@ class Renderer
 
   def learnset
     @pokemon.move_learnsets.each do |set|
-      if set["games"].include?("X")
-        moves = set["learnset"]
+      next unless set['games'].include?('X')
 
-        moves.each do |m|
-          m["type"] = Oakdex::Pokedex::Move.find(m["move"]).type
-          m["level"] = "egg" if m["egg_move"]
-          m["level"] = m["tm"] unless m["tm"].nil?
-        end
-        return moves
-      end
+      return parse_learnset(set['learnset'])
     end
+    parse_learnset(@pokemon.move_learnsets.last['learnset'])
+  end
+
+  def parse_learnset(moves)
+    moves.each do |m|
+      m['type'] = Oakdex::Pokedex::Move.find(m['move']).type
+      m['level'] = 'egg' if m['egg_move']
+      m['level'] = m['tm'] unless m['tm'].nil?
+    end
+    moves
   end
 end
 
-puts "generating"
-(1..809).each do  |id|
+names = []
+puts 'generating'
+all_pokemon = Oakdex::Pokedex::Pokemon.all
+all_pokemon.keys.each do |name|
+  id = all_pokemon[name].national_id
   puts "Running id #{id}"
   html = Renderer.new(id).render
   File.write("#{id}.html", html)
+  names << {
+    id: id,
+    name: name.downcase,
+    types: all_pokemon[name].types.join('-').downcase
+  }
 end
-puts "done"
+File.write('../names.json', names.sort_by { |x| x[:id] }.to_json)
+puts 'done'
