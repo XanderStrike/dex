@@ -5,6 +5,9 @@
 Dex is a very simple, brutalist Pokedex.
 
 Inspired by (but markedly inferior to) [Pokedex.org](https://pokedex.org/).
+Though at the time of writing, that app is only complete up to Generation V, and
+does not successfully build on my machine, which is a problem because I've grown
+quite dependent on it and now want to play a Generation VI game.
 
 You can check it out here: https://dex.astandke.com/
 
