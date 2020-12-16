@@ -4,9 +4,17 @@
 
 Dex is a very simple, brutalist Pokedex.
 
+Inspired by (but markedly inferior to) [Pokedex.org](https://pokedex.org/).
+
 You can check it out here: https://dex.astandke.com/
 
 On Android (and maybe iOS idk) you can add it to your home screen to make it super handy.
+
+Despite having beat every Pokemon game at least once, I'm quite ignorant of the
+complex underpinnings of the Pokemon battle system. I find myself only ever
+interested in two things: what types of attacks a rival pokemon is weak to, and
+which attacks a given Pokemon can learn. Therefore, this app only exposes those
+two pieces of information.
 
 ## Hosting
 
