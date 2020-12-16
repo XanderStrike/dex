@@ -29,6 +29,8 @@ class Renderer
     ERB.new(template).result(binding)
   end
 
+  private
+
   def types
     @pokemon.types.map do |type|
       Oakdex::Pokedex::Type.find(type)
@@ -78,7 +80,7 @@ all_pokemon.keys.each do |name|
   names << {
     id: id,
     name: name.downcase,
-    types: all_pokemon[name].types.join('-').downcase
+    types: all_pokemon[name].types.sort.join('-').downcase
   }
 end
 File.write('../names.json', names.sort_by { |x| x[:id] }.to_json)
