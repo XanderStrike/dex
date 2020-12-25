@@ -59,10 +59,17 @@ $("#search").focus( function() {
 function writeResults(q) {
   $("#results").empty();
   var template = document.getElementById('result-line').innerHTML;
+  var count = 0;
   $.each( names, function( key, val ) {
     if (val['n'].includes(q)){
       var rendered = Mustache.render(template, { id: val['i'], name: val['n'], type: val['t'] });
       $("#results").append(rendered);
+
+      // 50 results should be good enough for anybody
+      count += 1;
+      if (count >= 50) {
+        return false;
+      }
     }
   });
   hooks();
