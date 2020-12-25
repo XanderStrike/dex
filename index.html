@@ -71,19 +71,20 @@ function writeResults(q) {
 function hooks() {
   $(".result-line").click(function() {
     $("#results").empty();
+    var pokeTpl = document.getElementById('pokemon').innerHTML;
+    var damageTpl = document.getElementById('damage-row').innerHTML;
+
     var type = $(this).attr("id");
     var name = $(this).find("span.name").html();
     var id = $(this).find("span.id").html();
+
     $("#search").val(name);
-    var pokeTpl = document.getElementById('pokemon').innerHTML;
-    var damageTpl = document.getElementById('damage-row').innerHTML;
+
     weakness = weaknesses[type];
     rows = "";
     Object.keys(weakness).forEach(function (key) {
-      console.log(key + weakness[key]);
       rows += Mustache.render(damageTpl, { type: key, val: weakness[key] });
     });
-    console.log(rows);
 
     var rendered = Mustache.render(pokeTpl, { damages: rows, id: id, type: type });
     $("#results").append(rendered);
