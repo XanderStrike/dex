@@ -31,18 +31,8 @@ docker run -p 8080:80 xanderstrike/dex
 
 ## Development
 
-This is basically a single purpose static site generator. Each Pokemon has a
-partial in the `pokemon/` directory corresponding to it's national id, which is
-built based on the template `pokemon/pokemon.html.erb`. To regenerate, cd to the
-`pokemon` folder and run `ruby generate_templates.rb`.
-
-For that reason, you can use any webserver to host this while you iterate on it.
-I'm partial to this command:
-
-```
-docker run -p 8080:80 -v $(pwd):/usr/share/nginx/html nginx
-
-```
+All the logic lives in index.html, the json is simply massaged data from the
+PokeAPI CSV dumps.
 
 ## License
 
