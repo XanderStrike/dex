@@ -44,7 +44,28 @@ $.getJSON( "/names.json", function( data ) {
 });
 
 $.getJSON( "/weaknesses.json", function( data ) {
+  // single types
   weaknesses = data;
+
+  // double type calculation
+  var keys = Object.keys(data).sort();
+  keys.forEach(type1 => {
+    keys.forEach(type2 => {
+      if (type1 == type2) {
+        return;
+      }
+      var tag = [type1, type2].sort().join('-');
+      if (weaknesses[tag] != null) {
+        return;
+      }
+      var newWeaknesses = {};
+      keys.forEach(weaktype => {
+        newWeaknesses[weaktype] = weaknesses[type1][weaktype] * weaknesses[type2][weaktype];
+      });
+
+      weaknesses[tag] = newWeaknesses;
+    });
+  });
 });
 
 $("#search").keyup(debounce(function() {
@@ -88,8 +109,10 @@ function hooks() {
     $("#search").val(name);
 
     weakness = weaknesses[type];
+    var keysSorted = Object.keys(weakness).sort((a, b) => weakness[b] - weakness[a]);
+
     rows = "";
-    Object.keys(weakness).forEach(function (key) {
+    keysSorted.forEach(function (key) {
       rows += Mustache.render(damageTpl, { type: key, val: weakness[key] });
     });
 
