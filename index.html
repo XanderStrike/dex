@@ -34,7 +34,7 @@
   <script id="damage-row" type="x-tmpl-mustache">
     <span class="damage-row {{ type }}"><span class="row-inner">{{ val }}x {{ type }}</span></span>
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/4.1.0/mustache.min.js" integrity="sha512-HYiNpwSxYuji84SQbCU5m9kHEsRqwWypXgJMBtbRSumlx1iBB6QaxgEBZHSHEGM+fKyCX/3Kb5V5jeVXm0OglQ==" crossorigin="anonymous"></script>
+  <script src="/mustache.min.js" integrity="sha512-HYiNpwSxYuji84SQbCU5m9kHEsRqwWypXgJMBtbRSumlx1iBB6QaxgEBZHSHEGM+fKyCX/3Kb5V5jeVXm0OglQ==" crossorigin="anonymous"></script>
   <script>
 var names;
 var weaknesses;
@@ -124,6 +124,7 @@ function selectPokemon(type, name, id) {
 
   var rendered = Mustache.render(pokeTpl, { damages: rows, id: id, type: type });
   document.getElementById("results").innerHTML = rendered;
+  window.scrollTo(0, 0);
 }
 
 window.addEventListener('popstate', function (event) {
@@ -152,6 +153,12 @@ function debounce(func, wait, immediate) {
         if (callNow) func.apply(context, args);
     };
 };
+
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+           .register('/sw.js')
+           .then(function() { console.log("Service Worker Registered"); });
+}
   </script>
 
   </body>
