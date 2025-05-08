@@ -17,24 +17,6 @@
       Loading...
     </div>
 
-  <script id="result-line" type="x-tmpl-mustache">
-    <div onclick="selectPokemon('{{type}}', '{{name}}', '{{id}}')" id="{{ type }}" class="result-line {{ type }}">
-      #<span  class="id">{{ id }}</span><span class="name">{{ name }}</span>
-    </div>
-  </script>
-  <script id="pokemon" type="x-tmpl-mustache">
-    <div class="pokemon {{ type }}">
-      <div class="sprite"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ id }}.png"></div>
-      <div class="damage">
-        <div class="banner">Weaknesses</div>
-        {{{ damages }}}
-      </div>
-    </div>
-  </script>
-  <script id="damage-row" type="x-tmpl-mustache">
-    <span class="damage-row {{ type }}"><span class="row-inner">{{ val }}x {{ type }}</span></span>
-  </script>
-  <script src="/mustache.min.js" integrity="sha512-HYiNpwSxYuji84SQbCU5m9kHEsRqwWypXgJMBtbRSumlx1iBB6QaxgEBZHSHEGM+fKyCX/3Kb5V5jeVXm0OglQ==" crossorigin="anonymous"></script>
   <script>
 var names;
 var weaknesses;
@@ -83,17 +65,29 @@ function clearSearch() {
 }
 
 function writeResults(q) {
-  document.getElementById("results").innerHTML = "";
-
-  var template = document.getElementById('result-line').innerHTML;
-  var count = 0;
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = "";
+  let count = 0;
 
   for (const [key, val] of Object.entries(names)) {
-    if (val['n'].includes(q)){
-      var rendered = Mustache.render(template, { id: val['i'], name: val['n'], type: val['t'] });
-      document.getElementById("results").innerHTML += rendered;
+    if (val['n'].includes(q)) {
+      const resultLine = document.createElement('div');
+      resultLine.onclick = () => selectPokemon(val['t'], val['n'], val['i']);
+      resultLine.id = val['t'];
+      resultLine.className = `result-line ${val['t']}`;
 
-      // 50 results should be good enough for anybody
+      const idSpan = document.createElement('span');
+      idSpan.className = 'id';
+      idSpan.textContent = `#${val['i']}`;
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'name';
+      nameSpan.textContent = val['n'];
+
+      resultLine.appendChild(idSpan);
+      resultLine.appendChild(nameSpan);
+      resultsDiv.appendChild(resultLine);
+
       count += 1;
       if (count >= 50) {
         break;
@@ -103,27 +97,47 @@ function writeResults(q) {
 }
 
 function selectPokemon(type, name, id) {
-  document.getElementById("results").innerHTML = "";
-
-  var pokeTpl = document.getElementById('pokemon').innerHTML;
-  var damageTpl = document.getElementById('damage-row').innerHTML;
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = "";
 
   document.getElementById("search").value = name;
 
   const url = new URL(window.location);
-  if (!history.state || history.state.id!=id)
-    history.pushState({type: type, name: name, id: id}, "", url);
+  if (!history.state || history.state.id != id)
+    history.pushState({ type: type, name: name, id: id }, "", url);
 
-  weakness = weaknesses[type];
-  var keysSorted = Object.keys(weakness).sort((a, b) => weakness[b] - weakness[a]);
+  const pokemonDiv = document.createElement('div');
+  pokemonDiv.className = `pokemon ${type}`;
 
-  rows = "";
+  const spriteDiv = document.createElement('div');
+  spriteDiv.className = 'sprite';
+  const spriteImg = document.createElement('img');
+  spriteImg.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  spriteDiv.appendChild(spriteImg);
+
+  const damageDiv = document.createElement('div');
+  damageDiv.className = 'damage';
+  const bannerDiv = document.createElement('div');
+  bannerDiv.className = 'banner';
+  bannerDiv.textContent = 'Weaknesses';
+  damageDiv.appendChild(bannerDiv);
+
+  const currentWeakness = weaknesses[type];
+  const keysSorted = Object.keys(currentWeakness).sort((a, b) => currentWeakness[b] - currentWeakness[a]);
+
   keysSorted.forEach(function (key) {
-    rows += Mustache.render(damageTpl, { type: key, val: weakness[key] });
+    const damageRowSpan = document.createElement('span');
+    damageRowSpan.className = `damage-row ${key}`;
+    const rowInnerSpan = document.createElement('span');
+    rowInnerSpan.className = 'row-inner';
+    rowInnerSpan.textContent = `${currentWeakness[key]}x ${key}`;
+    damageRowSpan.appendChild(rowInnerSpan);
+    damageDiv.appendChild(damageRowSpan);
   });
 
-  var rendered = Mustache.render(pokeTpl, { damages: rows, id: id, type: type });
-  document.getElementById("results").innerHTML = rendered;
+  pokemonDiv.appendChild(spriteDiv);
+  pokemonDiv.appendChild(damageDiv);
+  resultsDiv.appendChild(pokemonDiv);
   window.scrollTo(0, 0);
 }
 
